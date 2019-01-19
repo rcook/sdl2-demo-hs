@@ -3,13 +3,22 @@
 module Main (main) where
 
 import Control.Monad (unless)
+import Foreign.C.Types (CInt)
 import Linear (V4(..))
 import SDL
+
+width :: CInt
+width = 640
+
+height :: CInt
+height = 480
 
 main :: IO ()
 main = do
     initializeAll
-    window <- createWindow "My SDL Application" defaultWindow
+    window <- createWindow
+                "Hello World"
+                defaultWindow { windowInitialSize = V2 width height }
     renderer <- createRenderer window (-1) defaultRenderer
     appLoop renderer
     destroyWindow window
@@ -25,7 +34,13 @@ appLoop renderer = do
                         keysymKeycode (keyboardEventKeysym keyboardEvent) == KeycodeQ
                 _ -> False
         qPressed = any eventIsQPress events
+
     rendererDrawColor renderer $= V4 0 0 255 255
     clear renderer
+
+    rendererDrawColor renderer $= V4 255 0 0 255
+    drawLine renderer (P (V2 0 0)) (P (V2 (width - 1) (height - 1)))
+
     present renderer
+
     unless qPressed (appLoop renderer)
