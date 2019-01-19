@@ -12,6 +12,8 @@ main = do
     window <- createWindow "My SDL Application" defaultWindow
     renderer <- createRenderer window (-1) defaultRenderer
     appLoop renderer
+    destroyWindow window
+    putStrLn "Done"
 
 appLoop :: Renderer -> IO ()
 appLoop renderer = do
